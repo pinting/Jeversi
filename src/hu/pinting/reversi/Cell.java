@@ -14,6 +14,17 @@ public enum Cell {
         }
     }
 
+    public static String toString(Cell cell) {
+        switch (cell) {
+            case BLACK:
+                return "X";
+            case WHITE:
+                return "O";
+            default:
+                return "";
+        }
+    }
+
     public static int toNum(Cell cell) {
         switch (cell) {
             case BLACK:
@@ -27,9 +38,9 @@ public enum Cell {
 
     public static Cell fromByte(byte c) {
         switch (c) {
-            case 'b':
+            case (byte) '1':
                 return Cell.BLACK;
-            case 'w':
+            case (byte) '2':
                 return Cell.WHITE;
             default:
                 return Cell.BLANK;
@@ -39,11 +50,11 @@ public enum Cell {
     public static byte toByte(Cell type) {
         switch (type) {
             case BLACK:
-                return 'b';
+                return '1';
             case WHITE:
-                return 'w';
+                return '2';
             default:
-                return 'b';
+                return '0';
         }
     }
 }

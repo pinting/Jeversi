@@ -50,14 +50,14 @@ public class Board {
     }
 
     public Cell get(int x, int y) {
-        if(x >= size() || y >= size()) {
+        if(x < 0 || y < 0 || x >= size() || y >= size()) {
             return null;
         }
 
         return board[y][x];
     }
 
-    public void set(int x, int y, Cell type) {
+    private void set(int x, int y, Cell type) {
         if(get(x, y) == null) {
             return;
         }
@@ -71,7 +71,7 @@ public class Board {
 
         while(true)
         {
-            board[x1][y1] = type;
+            set(x1, y1, type);
 
             if (x1 == x2 && y1 == y2)
             {
@@ -223,11 +223,11 @@ public class Board {
     }
 
     public void init(Cell type) {
-        for (int y = 0; y < size(); y++)
-        {
-            for (int x = 0; x < size(); x++)
-            {
-                set(x, y, Cell.BLANK);
+        for(int y = 0; y < size(); y++) {
+            board[y] = new Cell[size()];
+
+            for(int x = 0; x < size(); x++) {
+                board[y][x] = Cell.BLANK;
             }
         }
 
