@@ -1,2 +1,2 @@
-# Reversi
+# Jeversi
 Pababababam!

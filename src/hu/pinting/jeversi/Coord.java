@@ -1,4 +1,4 @@
-package hu.pinting.reversi;
+package hu.pinting.jeversi;
 
 public class Coord {
     public int x;

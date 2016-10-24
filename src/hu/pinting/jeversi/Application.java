@@ -1,4 +1,4 @@
-package hu.pinting.reversi;
+package hu.pinting.jeversi;
 
 import javax.swing.*;
 import java.io.File;

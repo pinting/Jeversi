@@ -1,4 +1,4 @@
-package hu.pinting.reversi;
+package hu.pinting.jeversi;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -168,7 +168,7 @@ public class Game extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         init();
 
-        setTitle("Reversi");
+        setTitle("Jeversi");
         setResizable(false);
         setVisible(true);
     }

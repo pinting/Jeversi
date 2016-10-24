@@ -1,4 +1,4 @@
-package hu.pinting.reversi;
+package hu.pinting.jeversi;
 
 public interface AI {
     void init(double difficulty);

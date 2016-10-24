@@ -1,4 +1,4 @@
-package hu.pinting.reversi;
+package hu.pinting.jeversi;
 
 import java.util.Random;
 
