@@ -13,6 +13,8 @@ public class Game extends JFrame {
     public static final int SYMBOL_SIZE = CELL_SIZE - CELL_PADDING * 2;
     public static final int SYMBOL_STROKE_WIDTH = 5;
 
+    private boolean disableMouse = false;
+
     private Cell player = Cell.WHITE;
     private double difficulty = 0.33;
     private int size = 8;
@@ -42,23 +44,22 @@ public class Game extends JFrame {
             Graphics2D gfx2d = (Graphics2D)gfx;
 
             gfx2d.setStroke(new BasicStroke(SYMBOL_STROKE_WIDTH, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+            gfx2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
             for (int y = 0; y < board.size(); y++) {
                 for (int x = 0; x < board.size(); x++) {
                     int x1 = x * CELL_SIZE + CELL_PADDING;
                     int y1 = y * CELL_SIZE + CELL_PADDING;
 
-                    if (board.get(x, y) == Cell.BLACK) {
-                        gfx2d.setColor(Color.RED);
+                    gfx2d.setColor(Color.BLACK);
 
+                    if (board.get(x, y) == Cell.BLACK) {
                         int x2 = (x + 1) * CELL_SIZE - CELL_PADDING;
                         int y2 = (y + 1) * CELL_SIZE - CELL_PADDING;
 
-                        gfx2d.drawLine(x1, y1, x2, y2);
-                        gfx2d.drawLine(x2, y1, x1, y2);
+                        gfx2d.fillOval(x1, y1, SYMBOL_SIZE, SYMBOL_SIZE);
                     }
                     else if (board.get(x, y) == Cell.WHITE) {
-                        gfx2d.setColor(Color.BLUE);
                         gfx2d.drawOval(x1, y1, SYMBOL_SIZE, SYMBOL_SIZE);
                     }
                 }
@@ -67,29 +68,12 @@ public class Game extends JFrame {
     }
 
     public Game() {
+        // Set up canvas and click event
         canvas = new DrawCanvas();
         canvas.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                int mouseX = e.getX();
-                int mouseY = e.getY();
-
-                int y = mouseY / CELL_SIZE;
-                int x = mouseX / CELL_SIZE;
-
-                if (board.test(x, y, player) > 0) {
-                    board.move(x, y, player);
-                    computerMove();
-                }
-                else {
-                    status.setText("Invalid move!");
-                }
-
-                if(board.movesLeft(player) == 0 && board.movesLeft(Cell.negate(player)) == 0) {
-                    status.setText(Cell.toString(player) + " won!");
-                }
-
-                repaint();
+                onClick(e);
             }
         });
 
@@ -168,8 +152,8 @@ public class Game extends JFrame {
         group.add(button);
         menu.add(button);
 
-        button = new JRadioButtonMenuItem("12");
-        button.addItemListener(e -> changeSize(12));
+        button = new JRadioButtonMenuItem("16");
+        button.addItemListener(e -> changeSize(16));
         group.add(button);
         menu.add(button);
 
@@ -196,9 +180,9 @@ public class Game extends JFrame {
         ai = new SimpleAI();
         ai.init(difficulty);
 
-        Dimension window = new Dimension(CELL_SIZE * board.size(), CELL_SIZE * board.size());
+        disableMouse = false;
 
-        canvas.setPreferredSize(window);
+        canvas.setPreferredSize(new Dimension(CELL_SIZE * board.size(), CELL_SIZE * board.size()));
         pack();
 
         if(player == Cell.BLACK) {
@@ -223,33 +207,88 @@ public class Game extends JFrame {
         init();
     }
 
-    private void computerMove() {
-        Coord coord = ai.get(board, Cell.negate(player));
-
-        if(coord != null) {
-            board.move(coord.x, coord.y, Cell.negate(player));
-        }
-    }
-
     private void save() {
         try {
             board.save(new File("save.bin"));
+            status.setText("Game saved!");
         }
         catch (IOException e) {
-            status.setText("Failed to save!");
+            status.setText("IO error: " + e.getMessage());
         }
     }
 
     private void load() {
         try {
-            board.load(new File("save.bin"));
             init();
+            board.load(new File("save.bin"));
+            status.setText("Game loaded!");
+            repaint();
         }
         catch (IOException e) {
             status.setText("Failed to load!");
         }
         catch (BoardException e) {
-            status.setText(e.getMessage());
+            status.setText("Board error: " + e.getMessage());
         }
+    }
+
+    private boolean computerMove() {
+        Coord coord = ai.get(board, Cell.negate(player));
+
+        if(coord != null) {
+            board.move(coord.x, coord.y, Cell.negate(player));
+            return true;
+        }
+
+        return false;
+    }
+
+    private void computerAttack() {
+        if(board.movesLeft(Cell.negate(player)) == 0) {
+            status.setText(Cell.toString(Cell.negate(player)) + " passed!");
+        }
+        else {
+            computerMove();
+        }
+
+        if(board.movesLeft(player) == 0) {
+            status.setText(Cell.toString(player) + " passed!");
+            computerMove();
+        }
+
+        if(board.movesLeft(player) == 0 && board.movesLeft(Cell.negate(player)) == 0) {
+            status.setText(Cell.toString(player) + " won!");
+        }
+        else {
+            disableMouse = false;
+        }
+
+        repaint();
+    }
+
+    private void onClick(MouseEvent e) {
+        if(disableMouse) {
+            return;
+        }
+
+        int mouseX = e.getX();
+        int mouseY = e.getY();
+
+        int y = mouseY / CELL_SIZE;
+        int x = mouseX / CELL_SIZE;
+
+        if(board.test(x, y, player) <= 0) {
+            status.setText("Invalid move!");
+            return;
+        }
+
+        board.move(x, y, player);
+        repaint();
+
+        disableMouse = true;
+
+        Timer timer = new Timer(1000, event -> computerAttack());
+        timer.setRepeats(false);
+        timer.start();
     }
 }

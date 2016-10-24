@@ -17,9 +17,9 @@ public enum Cell {
     public static String toString(Cell cell) {
         switch (cell) {
             case BLACK:
-                return "X";
+                return "Black";
             case WHITE:
-                return "O";
+                return "White";
             default:
                 return "";
         }

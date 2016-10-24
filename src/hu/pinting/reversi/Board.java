@@ -5,24 +5,27 @@ import java.io.*;
 public class Board {
     private Cell[][] board;
 
-    public Board(int size) {
+    public Board(int size) { init(size); }
+
+    private void init(int size) {
         board = new Cell[size][size];
     }
 
-    public Board() {
-        this(8);
-    }
-
     public void load(File file) throws IOException, BoardException {
-        if(file.length() != size()) {
-            throw new BoardException("Board size mismatch!");
-        }
-
         byte[] save = new byte[(int) file.length()];
 
         DataInputStream stream = new DataInputStream(new FileInputStream(file));
         stream.readFully(save);
         stream.close();
+
+        if(save.length != size() * size()) {
+            if(save.length % Math.sqrt(save.length) == 0) {
+                init((int)Math.sqrt(save.length));
+            }
+            else {
+                throw new BoardException("Cannot process board size!");
+            }
+        }
 
         for(int y = 0; y < size(); y++) {
             for(int x = 0; x < size(); x++) {
@@ -189,8 +192,7 @@ public class Board {
         return count;
     }
 
-    public int movesLeft(Cell type)
-    {
+    public int movesLeft(Cell type) {
         int count = 0;
         int x, y;
 
@@ -215,7 +217,7 @@ public class Board {
         {
             for (int x = 0; x < size(); x++)
             {
-                clone.set(x, y, get(x, y));
+                clone.board[y][x] = get(x, y);
             }
         }
 

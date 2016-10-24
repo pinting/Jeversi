@@ -28,7 +28,7 @@ public class SimpleAI implements AI {
             {
                 int value = init + Cell.toNum(type) * board.test(x, y, type);
 
-                if (value == 0)
+                if (value == init)
                 {
                     continue;
                 }
