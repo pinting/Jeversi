@@ -39,7 +39,7 @@ public class Game extends JFrame {
     class DrawCanvas extends JPanel {
         /**
          * Játéktér újrarajzolása repaint() esetén.
-         * @param gfx
+         * @param gfx Graphics objektum.
          */
         @Override
         public void paintComponent(Graphics gfx) {
@@ -370,8 +370,8 @@ public class Game extends JFrame {
     }
 
     /**
-     * Új üzenet megjelenítése és hozzáadása a log-hoz.
-     * @param message
+     * Új üzenet megjelenítése és hozzáadása a loghoz.
+     * @param message Az új üzenet.
      */
     private void addStatus(String message) {
         status.setText(message);

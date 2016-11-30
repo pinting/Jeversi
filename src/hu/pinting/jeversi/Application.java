@@ -1,20 +1,16 @@
 package hu.pinting.jeversi;
 
 import javax.swing.*;
-import java.io.File;
-import java.io.IOException;
 
+/**
+ * A főprogram megvalósítása, amely megjeleníti a Game JFrameet.
+ */
 public class Application {
     /**
      * Game JFrame megjelenítése.
-     * @param args
+     * @param args Konzol argumentumok.
      */
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                new Game();
-            }
-        });
+        SwingUtilities.invokeLater(() -> new Game());
     }
 }

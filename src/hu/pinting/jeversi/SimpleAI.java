@@ -11,8 +11,8 @@ public class SimpleAI implements AI {
     private int maxLevel;
 
     /**
-     * Véletlen kockadobás 0 és 1 között.
-     * @return
+     * Véletlen kockadobás.
+     * @return 0 vagy 1.
      */
     private boolean quess() {
         return random.nextInt(1) == 0 ? false : true;
@@ -24,9 +24,9 @@ public class SimpleAI implements AI {
      * @param type Számolni kívánt cella típus - cserélődik szintenként.
      * @param init Kezdőérték.
      * @param level Az adott szint.
-     * @param alpha Alpha értéke -
-     * @param beta
-     * @return
+     * @param alpha Alpha értéke - min cut.
+     * @param beta Beta értéke - max cut.
+     * @return Adott szint értéke.
      */
     private int calculate(Board board, Cell type, int init, int level, int alpha, int beta) {
         if (level == 0)

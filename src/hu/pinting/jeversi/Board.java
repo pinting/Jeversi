@@ -10,7 +10,7 @@ public class Board {
 
     /**
      * Tábla létrehozása.
-     * @param size
+     * @param size Tábla mérete.
      */
     public Board(int size) { init(size); }
 
@@ -56,6 +56,7 @@ public class Board {
      * Tábla betöltése fájlból.
      * @param file Fájl elérési útvonala.
      * @throws BoardException Ha nem lehet feldolgozni a tábla tartalmát.
+     * @throws IOException A fájlt nem lehet olvasni.
      */
     public void load(File file) throws BoardException, IOException {
         try {
@@ -95,6 +96,7 @@ public class Board {
      * Tábla mentése fájlba.
      * @param file Fájl elérési útvonala.
      * @throws BoardException Ha nem írható a fájl.
+     * @throws IOException Ha nem írható a fájl.
      */
     public void save(File file) throws BoardException, IOException {
         try {
@@ -178,7 +180,7 @@ public class Board {
      * @param y Y koordináta.
      * @param type Játékos típusa.
      * @param test Csak tesztelés.
-     * @return
+     * @return Átfordított ellenséges cellák száma.
      */
     private int move(int x, int y, Cell type, boolean test)
     {
@@ -245,8 +247,8 @@ public class Board {
 
     /**
      * Lépés végrehajtása.
-     * @param x
-     * @param y
+     * @param x X koordináta.
+     * @param y Y koordináta.
      * @param type Játékos típusa.
      * @return Az átfordított ellenséges cellák.
      */
@@ -256,8 +258,8 @@ public class Board {
 
     /**
      * Lépés által leütött ellenséges cellák megszámolása.
-     * @param x
-     * @param y
+     * @param x X koordináta.
+     * @param y Y koordináta.
      * @param type Játékos típusa.
      * @return Az átfordított ellenséges cellák.
      */
@@ -267,8 +269,8 @@ public class Board {
 
     /**
      * Cella értékének lekérése - ez alapján lép az AI.
-     * @param x
-     * @param y
+     * @param x X koordináta.
+     * @param y Y koordináta.
      * @return Cella értéke.
      */
     public int value(int x, int y) {
@@ -355,7 +357,7 @@ public class Board {
 
     /**
      * Tábla inicializálása egy adott cella típus szerint.
-     * @param type
+     * @param type Kezdő cella típusa.
      */
     public void init(Cell type) {
         for(int y = 0; y < size(); y++) {

@@ -5,8 +5,8 @@ package hu.pinting.jeversi;
  */
 public interface AI {
     /**
-     * AI inicializálása egy adott nehézséggel, amit százalékban adunk meg.
-     * @param difficulty
+     * AI inicializálása egy adott nehézséggel.
+     * @param difficulty Nehézség százalékban.
      */
     void init(double difficulty);
 
@@ -14,7 +14,7 @@ public interface AI {
      * Legjobb lépés megtétele a táblán.
      * @param board Lépéshez a tábla.
      * @param type Cella típusa.
-     * @return
+     * @return Koordináta a táblán.
      */
     Coord get(Board board, Cell type);
 }

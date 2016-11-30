@@ -1,5 +1,8 @@
 package hu.pinting.jeversi;
 
+/**
+ * Egy cellát megvalósító enum.
+ */
 public enum Cell {
     BLACK, // MAX
     WHITE, // MIN
