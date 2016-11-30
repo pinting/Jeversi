@@ -4,8 +4,14 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import javax.swing.*;
 
+/**
+ * A játékteret megjelenítő Game JFrame.
+ */
 public class Game extends JFrame {
     public static final int CELL_SIZE = 50;
     public static final int GRID_WIDTH = 1;
@@ -14,6 +20,8 @@ public class Game extends JFrame {
     public static final int SYMBOL_STROKE_WIDTH = 5;
 
     private boolean disableMouse = false;
+    private ArrayList<String> log = new ArrayList<>();
+    private JFrame logFrame = null;
 
     private Cell player = Cell.WHITE;
     private double difficulty = 0.33;
@@ -25,7 +33,14 @@ public class Game extends JFrame {
     private Board board;
     private AI ai;
 
+    /**
+     * Játéktér megjelenítése Graphics2D segítségével.
+     */
     class DrawCanvas extends JPanel {
+        /**
+         * Játéktér újrarajzolása repaint() esetén.
+         * @param gfx
+         */
         @Override
         public void paintComponent(Graphics gfx) {
             super.paintComponent(gfx);
@@ -67,8 +82,11 @@ public class Game extends JFrame {
         }
     }
 
+    /**
+     * Ablak létrehozása.
+     */
     public Game() {
-        // Set up canvas and click event
+        // Canvas létrehozása
         canvas = new DrawCanvas();
         canvas.addMouseListener(new MouseAdapter() {
             @Override
@@ -97,6 +115,10 @@ public class Game extends JFrame {
 
         item = new JMenuItem("Save");
         item.addActionListener(e -> save());
+        menu.add(item);
+
+        item = new JMenuItem("Log");
+        item.addActionListener(e -> showLog());
         menu.add(item);
 
         // Difficulty menu
@@ -136,7 +158,7 @@ public class Game extends JFrame {
         group.add(button);
         menu.add(button);
 
-        // Difficulty menu
+        // Size menu
         menu = new JMenu("Size");
         group = new ButtonGroup();
         this.menu.add(menu);
@@ -157,7 +179,7 @@ public class Game extends JFrame {
         group.add(button);
         menu.add(button);
 
-        // Create container and add to JFrame
+        // Container létrehozása
         Container container = getContentPane();
 
         container.setLayout(new BorderLayout());
@@ -173,6 +195,9 @@ public class Game extends JFrame {
         setVisible(true);
     }
 
+    /**
+     * Tábla inicializálása az adott beállításokkal.
+     */
     private void init() {
         board = new Board(size);
         board.init(player);
@@ -183,55 +208,91 @@ public class Game extends JFrame {
         disableMouse = false;
 
         canvas.setPreferredSize(new Dimension(CELL_SIZE * board.size(), CELL_SIZE * board.size()));
+        setSize(1, 1);
+
+        revalidate();
         pack();
+
+        Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
+        setLocation(d.width / 2 - this.getSize().width / 2, d.height / 2 - this.getSize().height / 2);
 
         if(player == Cell.BLACK) {
             computerMove();
         }
 
+        addStatus("You move as " + Cell.toString(player) + "!");
         repaint();
     }
 
+    /**
+     * Játékos színének változtatása.
+     * @param player Fehér vagy fekete.
+     */
     private void changePlayer(Cell player) {
+        if(player != Cell.BLACK && player != Cell.WHITE) {
+            return;
+        }
+
         this.player = player;
         init();
     }
 
+    /**
+     * Tábla méretének megváltoztatása.
+     * @param size NxN-es tábla N paramétere.
+     */
     private void changeSize(int size) {
         this.size = size;
         init();
     }
 
+    /**
+     * Nehézség megváltoztatása.
+     * @param difficulty Nehézség százalékban.
+     */
     private void changeDifficulty(double difficulty) {
         this.difficulty = difficulty;
         init();
     }
 
+    /**
+     * Játék mentése fájlba.
+     */
     private void save() {
         try {
             board.save(new File("save.bin"));
-            status.setText("Game saved!");
+            addStatus("Game saved!");
         }
         catch (IOException e) {
-            status.setText("IO error: " + e.getMessage());
+            addStatus("IO error: " + e.getMessage());
+        }
+        catch (BoardException e) {
+            addStatus("Board error: " + e.getMessage());
         }
     }
 
+    /**
+     * Játék betöltése fájlból.
+     */
     private void load() {
         try {
             init();
             board.load(new File("save.bin"));
-            status.setText("Game loaded!");
+            addStatus("Game loaded!");
             repaint();
         }
         catch (IOException e) {
-            status.setText("Failed to load!");
+            addStatus("Failed to load!");
         }
         catch (BoardException e) {
-            status.setText("Board error: " + e.getMessage());
+            addStatus("Board error: " + e.getMessage());
         }
     }
 
+    /**
+     * Számítógép EGY lépésének kiszámolása és megtétele.
+     * @return Sikerült lépni?
+     */
     private boolean computerMove() {
         Coord coord = ai.get(board, Cell.negate(player));
 
@@ -243,21 +304,33 @@ public class Game extends JFrame {
         return false;
     }
 
+    /**
+     * Számítógép lépésének/lépéseinek kiszámolása és elhelyezése a táblán.
+     */
     private void computerAttack() {
         if(board.movesLeft(Cell.negate(player)) == 0) {
-            status.setText(Cell.toString(Cell.negate(player)) + " passed!");
+            addStatus(Cell.toString(Cell.negate(player)) + " passed!");
         }
         else {
             computerMove();
         }
 
         if(board.movesLeft(player) == 0) {
-            status.setText(Cell.toString(player) + " passed!");
+            addStatus(Cell.toString(player) + " passed!");
             computerMove();
         }
 
+        // Nyertes kiszámolása
         if(board.movesLeft(player) == 0 && board.movesLeft(Cell.negate(player)) == 0) {
-            status.setText(Cell.toString(player) + " won!");
+            if(board.count(player) > board.count(Cell.negate(player))) {
+                addStatus(Cell.toString(player) + " won!");
+            }
+            else if(board.count(player) < board.count(Cell.negate(player))) {
+                addStatus(Cell.toString(Cell.negate(player)) + " won!");
+            }
+            else {
+                addStatus("Tie!");
+            }
         }
         else {
             disableMouse = false;
@@ -266,6 +339,10 @@ public class Game extends JFrame {
         repaint();
     }
 
+    /**
+     * Játéktéren kattintás eventje.
+     * @param e Egér pozícióját tartalmazó MouseEvent.
+     */
     private void onClick(MouseEvent e) {
         if(disableMouse) {
             return;
@@ -278,7 +355,7 @@ public class Game extends JFrame {
         int x = mouseX / CELL_SIZE;
 
         if(board.test(x, y, player) <= 0) {
-            status.setText("Invalid move!");
+            addStatus("Invalid move!");
             return;
         }
 
@@ -290,5 +367,51 @@ public class Game extends JFrame {
         Timer timer = new Timer(1000, event -> computerAttack());
         timer.setRepeats(false);
         timer.start();
+    }
+
+    /**
+     * Új üzenet megjelenítése és hozzáadása a log-hoz.
+     * @param message
+     */
+    private void addStatus(String message) {
+        status.setText(message);
+
+        message = new SimpleDateFormat("HH:mm:ss - ").format(new Date()) + message;
+
+        try {
+            // Duplikációk elkerülése
+            if(message.compareTo(log.get(log.size() - 1)) != 0) {
+                log.add(message);
+            }
+        }
+        catch (ArrayIndexOutOfBoundsException e) {
+            log.add(message);
+        }
+    }
+
+    /**
+     * Üzenetnapló megjelenítése.
+     */
+    private void showLog() {
+        if(logFrame != null) {
+            return;
+        }
+
+        logFrame = new JFrame("Log");
+
+        JList list = new JList(log.toArray());
+        JScrollPane scrollPane = new JScrollPane(list);
+
+        logFrame.add(scrollPane);
+        logFrame.pack();
+        logFrame.setLocationRelativeTo(null);
+        logFrame.setVisible(true);
+        logFrame.setSize(260, 240);
+
+        logFrame.addWindowListener(new WindowAdapter(){
+            public void windowClosing(WindowEvent e) {
+                logFrame = null;
+            }
+        });
     }
 }

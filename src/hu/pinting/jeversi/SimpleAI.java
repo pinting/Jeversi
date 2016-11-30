@@ -2,15 +2,32 @@ package hu.pinting.jeversi;
 
 import java.util.Random;
 
+/**
+ * Egyszerű, több lépésben előre számoló és min/max vágással optimalizáló AI.
+ */
 public class SimpleAI implements AI {
     private Random random = new Random();
     private Coord result;
     private int maxLevel;
 
+    /**
+     * Véletlen kockadobás 0 és 1 között.
+     * @return
+     */
     private boolean quess() {
         return random.nextInt(1) == 0 ? false : true;
     }
 
+    /**
+     * Legjobb lépés kiszámítása rekurzívan.
+     * @param board Adott tábla.
+     * @param type Számolni kívánt cella típus - cserélődik szintenként.
+     * @param init Kezdőérték.
+     * @param level Az adott szint.
+     * @param alpha Alpha értéke -
+     * @param beta
+     * @return
+     */
     private int calculate(Board board, Cell type, int init, int level, int alpha, int beta) {
         if (level == 0)
         {

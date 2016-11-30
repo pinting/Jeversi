@@ -5,6 +5,11 @@ public enum Cell {
     WHITE, // MIN
     BLANK;
 
+    /**
+     * Átfordított cella lekérése.
+     * @param cell Cella típusa.
+     * @return Átfordított cella.
+     */
     public static Cell negate(Cell cell) {
         switch (cell) {
             case BLACK:
@@ -14,6 +19,11 @@ public enum Cell {
         }
     }
 
+    /**
+     * Az adott cella típusát reprezentáló szöved lekérése.
+     * @param cell Cella típusa.
+     * @return Szöveges megnevezés.
+     */
     public static String toString(Cell cell) {
         switch (cell) {
             case BLACK:
@@ -25,6 +35,11 @@ public enum Cell {
         }
     }
 
+    /**
+     * Cella számmá alakítása.
+     * @param cell Cella típusa.
+     * @return 1, ha fekete; 0, ha fehér, ellenben -1
+     */
     public static int toNum(Cell cell) {
         switch (cell) {
             case BLACK:
@@ -36,6 +51,11 @@ public enum Cell {
         }
     }
 
+    /**
+     * Cella létrehozása karakterből - betöltéshez.
+     * @param c Cellát leíró karakter.
+     * @return Cella.
+     */
     public static Cell fromByte(byte c) {
         switch (c) {
             case (byte) '1':
@@ -47,6 +67,11 @@ public enum Cell {
         }
     }
 
+    /**
+     * Cella karakterré alakítása - lementéshez.
+     * @param type Cella típusa.
+     * @return Cellát leíró karakter.
+     */
     public static byte toByte(Cell type) {
         switch (type) {
             case BLACK:
