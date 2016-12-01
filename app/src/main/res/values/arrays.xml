@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="difficulty_internal">
+        <item name="easy">33</item>
+        <item name="medium">66</item>
+        <item name="hard">100</item>
+    </string-array>
+    <string-array name="difficulty">
+        <item name="easy">@string/difficulty_easy</item>
+        <item name="medium">@string/difficulty_medium</item>
+        <item name="hard">@string/difficulty_hard</item>
+    </string-array>
+
+    <string-array name="player_internal">
+        <item name="white">-1</item>
+        <item name="black">1</item>
+    </string-array>
+    <string-array name="player">
+        <item name="white">@string/player_white</item>
+        <item name="black">@string/player_black</item>
+    </string-array>
+
+    <string-array name="size_internal">
+        <item name="small">4</item>
+        <item name="medium">8</item>
+        <item name="big">16</item>
+    </string-array>
+    <string-array name="size">
+        <item name="small">4</item>
+        <item name="medium">8</item>
+        <item name="big">16</item>
+    </string-array>
+</resources>

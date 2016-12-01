@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <ListPreference
+        android:key="player"
+        android:title="@string/player"
+        android:defaultValue="1"
+        android:entries="@array/player"
+        android:entryValues="@array/player_internal" />
+    <ListPreference
+        android:key="size"
+        android:title="@string/size"
+        android:defaultValue="8"
+        android:entries="@array/size"
+        android:entryValues="@array/size_internal" />
+    <ListPreference
+        android:key="difficulty"
+        android:title="@string/difficulty"
+        android:defaultValue="100"
+        android:entries="@array/difficulty"
+        android:entryValues="@array/difficulty_internal" />
+</PreferenceScreen>

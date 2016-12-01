@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Jeversi</string>
+
+    <string name="clear">Törlés</string>
+    <string name="settings">Beállítások</string>
+
+    <string name="size">Méret</string>
+
+    <string name="player">Szín</string>
+    <string name="player_white">Kék</string>
+    <string name="player_black">Piros</string>
+
+    <string name="difficulty">Nehézség</string>
+    <string name="difficulty_easy">Könnyű</string>
+    <string name="difficulty_medium">Közepes</string>
+    <string name="difficulty_hard">Nehéz</string>
+
+    <string name="invalid_move">Szabálytalan lépés!</string>
+    <string name="black_won">Piros győzött!</string>
+    <string name="white_won">Kék győzött!</string>
+    <string name="black_pass">Piros passzolt!</string>
+    <string name="white_pass">Kék passzolt!</string>
+    <string name="tie">Döntetlen!</string>
+</resources>

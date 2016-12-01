@@ -1,10 +1,6 @@
 # Jeversi
 
-<p align="center">
-    <img src="https://github.com/pinting/Jeversi/raw/master/screenshot.png" width="450" />
-</p>
-
-This is the second stage of a university project I worked on between 2015 and 2016.
+This is the third stage of a university project I worked on between 2015 and 2016.
 
 1. The game was created in C. Peter Rucz created his own generic board game AI implementation using min-max cut algorithm which is integrated into the project. The two AIs can play against each other. (Can be found in the Reversi repository.)
 2. It was ported to Java. (Can be found under the `master` branch in the Jeversi repository.)

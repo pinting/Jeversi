@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Jeversi</string>
+
+    <string name="clear">Clear</string>
+    <string name="settings">Settings</string>
+
+    <string name="size">Size</string>
+
+    <string name="player">Player</string>
+    <string name="player_white">Blue</string>
+    <string name="player_black">Red</string>
+
+    <string name="difficulty">Difficulty</string>
+    <string name="difficulty_easy">Easy</string>
+    <string name="difficulty_medium">Medium</string>
+    <string name="difficulty_hard">Hard</string>
+
+    <string name="invalid_move">Invalid move!</string>
+    <string name="black_won">Red won!</string>
+    <string name="white_won">Blue won!</string>
+    <string name="black_pass">Red passed!</string>
+    <string name="white_pass">Blue passed!</string>
+    <string name="tie">Tie!</string>
+</resources>
